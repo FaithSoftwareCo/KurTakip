@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="banner_ad_unit_id">ca-app-pub-5464826884846709/1154567265</string>
+
+    <string name="app_name">Kur Takip</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_main">Kur Takip</string>
+
+
+    <string name="pref_send_report">Send crash reports</string>
+    <string name="pref_send_report_summary">Helps to fix bugs</string>
+    <string name="pref_sync_frequency">Sync frequency</string>
+    <string name="pref_sync_frequency_summary">Set the sync frequency</string>
+    <string name="pref_user_name">Set username</string>
+    <string name="pref_user_name_summary">Set your username</string>
+
+    <string name="pref_user_profile">User Profile</string>
+    <string name="pref_update_setting">Update Settings</string>
+
+    <string name="general_settings_title">General Settings</string>
+    <string name="app_settings_title">Application Settings</string>
+    <string name="timeout_text">Timeout</string>
+    <string name="request_timeout_title">Update Timeout</string>
+    <string name="request_timeout_summary">Time in seconds to update</string>
+    <string name="pref_periodic_update_title">Update Periodically</string>
+    <string name="pref_periodic_update_summary">Allow to update exchanges in given timeout, periodically</string>
+    <string name="version_summary">v3.1_13.12.2015\nFaith Software©2014</string>
+
+    <string name="system_time">System Time:</string>
+    <string name="delete_records">"Delete records?"</string>
+    <string name="back">"BACK"</string>
+    <string name="last_read">Last Update:</string>
+    <string name="menuitem_refresh">Refresh</string>
+    <string name="exit">Exit</string>
+    <string name="graphical_view">Graphical Exchanges</string>
+    <string name="eur">Euro</string>
+    <string name="usd">USD</string>
+    <string name="xau">XAU(gr)</string>
+    <string name="kur_alis_satis">BUY - SELL</string>
+    <string name="page1_name">LOCAL RATES</string>
+    <string name="page2_name">EXCHANGES</string>
+    <string name="page3_name">GRAPHICS</string>
+    <string name="page4_name">FINANCIAL CALENDAR</string>
+    <string name="about">About</string>
+    <string name="action_settings">Settings</string>
+    <string name="app_desc">Follow exchanges and indexes</string>
+    <string name="borsalar">BIST 100</string>
+    <string name="convert">Convert</string>
+    <string name="refreshing">Updating...</string>
+    <string name="piyasalar">Exchanges</string>
+    <string name="version">Version</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="verilerim">Last Data</string>
+    <string name="bitcoin">Bitcoin Rates</string>
+    <string name="bitcoin_view">Bitcoin  Rates</string>
+    <string name="news_feed">Economic Calendar</string>
+</resources>

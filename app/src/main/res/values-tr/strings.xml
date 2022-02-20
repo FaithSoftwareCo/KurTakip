@@ -1,0 +1,56 @@
+<resources>
+    <string name="banner_ad_unit_id">ca-app-pub-5464826884846709/1154567265</string>
+    <string name="app_name">Kur Takip</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Ayarlar</string>
+    <string name="title_activity_main">Kur Takip</string>
+
+    <string name="pref_send_report">Hata Raporu Gönder</string>
+    <string name="pref_send_report_summary">Helps to fix bugs</string>
+    <string name="pref_sync_frequency">Sync frequency</string>
+    <string name="pref_sync_frequency_summary">Set the sync frequency</string>
+    <string name="pref_user_name">Set username</string>
+    <string name="pref_user_name_summary">Set your username</string>
+
+    <string name="pref_user_profile">User Profile</string>
+    <string name="pref_update_setting">Update Settings</string>
+
+    <string name="general_settings_title">Genel Ayarlar</string>
+    <string name="app_settings_title">Uygulama Ayarları</string>
+    <string name="timeout_text">Güncelleme Sıklığı</string>
+    <string name="request_timeout_title">Güncelleme Zamanı</string>
+    <string name="request_timeout_summary">Yeni kur verileri için güncelleme süresi(saniye)</string>
+    <string name="pref_periodic_update_title">Otomatik Güncelleme</string>
+    <string name="pref_periodic_update_summary">Kur verileri otomatik olarak belirtilen sürede güncellenir</string>
+    <string name="version_summary">v3.1_13.12.2015\nFaith Software©2014</string>
+
+    <string name="system_time">Sistem Saati:</string>
+    <string name="delete_records">"Tümünü Sil?"</string>
+    <string name="back">"GERİ"</string>
+    <string name="last_read">Son Veri:</string>
+    <string name="menuitem_refresh">Güncelle</string>
+    <string name="exit">Çıkış</string>
+    <string name="graphical_view">Grafiksel Değişim</string>
+    <string name="eur">Euro</string>
+    <string name="usd">USD</string>
+    <string name="xau">Altın(gr)</string>
+    <string name="kur_alis_satis">ALIŞ - SATIŞ</string>
+    <string name="page1_name">KURLAR</string>
+    <string name="page2_name">PİYASALAR</string>
+    <string name="page3_name">GRAFİKLER</string>
+    <string name="page4_name">FİNANSAL GELİŞMELER</string>
+    <string name="about">Hakkında</string>
+    <string name="convert">Döviz Çevirici</string>
+    <string name="action_settings">Ayarlar</string>
+    <string name="app_desc">Anlık döviz ve piyasa takibi</string>
+    <string name="refreshing">Güncelleniyor...</string>
+    <string name="piyasalar">Piyasalar</string>
+    <string name="version">Versiyon</string>
+    <string name="navigation_drawer_close">Menüyü kapat</string>
+    <string name="navigation_drawer_open">Menüyü aç</string>
+    <string name="borsalar">BİST 100</string>
+    <string name="verilerim">Son Veriler</string>
+    <string name="bitcoin">Bitcoin Piyasalar</string>
+    <string name="bitcoin_view">Bitcoin  Piyasası</string>
+    <string name="news_feed">Ekonomik Takvim</string>
+</resources>

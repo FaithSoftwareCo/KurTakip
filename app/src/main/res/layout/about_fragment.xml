@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:padding="10dp" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="- Faith Software -"
+        android:layout_marginStart="20dp"
+        android:padding="10dp"
+        android:textColor="#fff"
+        android:background="@color/colorPrimary"
+        android:textSize="20sp"
+        android:id="@+id/textView1"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_below="@id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Faith Software bu uygulamada yer alan herhangi bir bilgi, tablo ve grafik bilgisinden kaynaklanan kayıp ya da zararlarınızdan sorumlu değildir. Uygulamadaki bilgiler üçüncü parti web sitelerden çekilip, siz kullanıcılara sunulmaktadır.\nHer türlü bilgi ve görüş için faith.software@gmail.com adresine mail atabilirsiniz.\nCopyright©2017"
+        android:padding="12dp"
+        android:textColor="@color/colorPrimary"
+        android:textSize="12sp"
+        android:id="@+id/textView2"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_below="@id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/version"
+        android:paddingStart="20dp"
+        android:padding="10dp"
+        android:textColor="#fff"
+        android:background="@color/colorPrimary"
+        android:textSize="20sp"
+        android:id="@+id/textView3"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_below="@id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Son Güncelleme:"
+        android:padding="12dp"
+        android:textColor="@color/colorPrimary"
+        android:textSize="12sp"
+        android:id="@+id/appLabel"
+        android:layout_centerHorizontal="true" />
+</RelativeLayout>

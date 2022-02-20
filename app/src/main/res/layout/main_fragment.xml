@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="220dp"
+        android:background="#aaaaaa"
+        android:orientation="vertical"
+        android:layout_above="@+id/btn_start">
+        <WebView
+            android:id="@+id/webViewForex"
+            android:background="#b2daec"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:visibility="visible"
+            android:layout_gravity="center_horizontal|center_vertical" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_start"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_menu_refresh"
+        android:gravity="left|center_vertical"
+        android:text="@string/menuitem_refresh"/>
+
+<!--
+
+    <ScrollView
+        android:id="@+id/tableScrollView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical"
+        android:fillViewport="true">
+-->
+
+            <TableLayout
+                android:layout_width="fill_parent"
+                android:layout_marginBottom="2dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" android:id="@+id/YKTable">
+
+                <TableRow android:id="@+id/tableRow1" android:layout_width="match_parent" android:layout_height="wrap_content">
+
+                    <TextView android:background="@drawable/cell_shape" android:padding="4dp" android:id="@+id/textView10" android:layout_weight="1" android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceSmall" android:text="YapıKredi"
+                        android:textColor="@color/page2TextColor"
+                        android:textStyle="bold"></TextView>
+                    <TextView android:background="@drawable/cell_shape" android:padding="4dp" android:id="@+id/textView11" android:layout_weight="1" android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceSmall" android:text="Alış"
+                        android:textColor="@color/page2TextColor"
+                        android:textStyle="bold"></TextView>
+                    <TextView android:background="@drawable/cell_shape" android:padding="4dp" android:id="@+id/textView12" android:layout_weight="1" android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceSmall" android:text="Satış"
+                        android:textColor="@color/page2TextColor"
+                        android:textStyle="bold"></TextView>
+                    <TextView android:background="@drawable/cell_shape" android:padding="4dp" android:id="@+id/textView13" android:layout_weight="1" android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceSmall" android:text="Zaman"
+                        android:textColor="@color/page2TextColor"
+                        android:textStyle="bold"></TextView>
+
+                </TableRow>
+
+                <TableRow android:id="@+id/tableRow2" android:layout_width="match_parent" android:layout_height="wrap_content">
+
+                    <TextView android:background="@drawable/cell_shape" android:padding="4dp" android:id="@+id/textView20" android:layout_weight="1" android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceSmall" android:text="EUR"
+                        android:textColor="@color/page2TextColor"
+                        android:textStyle="bold"></TextView>
+                    <TextView android:background="@drawable/cell_shape_in" android:padding="4dp" android:id="@+id/yk_eur_alis_tv" android:layout_weight="1" android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceSmall" android:text="Alış"
+                        android:textColor="@color/page2TextColor"></TextView>
+                    <TextView android:background="@drawable/cell_shape_in" android:padding="4dp" android:id="@+id/yk_eur_satis_tv" android:layout_weight="1" android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceSmall" android:text="Satış"
+                        android:textColor="@color/page2TextColor"></TextView>
+                    <TextView android:background="@drawable/cell_shape_in" android:padding="4dp" android:id="@+id/yk_eur_time_tv" android:layout_weight="1" android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceSmall" android:text="Zaman"
+                        android:textColor="@color/page2TextColor"></TextView>
+
+                </TableRow>
+
+                <TableRow android:id="@+id/tableRow3" android:layout_width="match_parent" android:layout_height="wrap_content">
+
+                    <TextView android:background="@drawable/cell_shape" android:padding="4dp" android:id="@+id/textView30" android:layout_weight="1" android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceSmall" android:text="USD"
+                        android:textColor="@color/page2TextColor"
+                        android:textStyle="bold"></TextView>
+                    <TextView android:background="@drawable/cell_shape_in" android:padding="4dp" android:id="@+id/yk_usd_alis_tv" android:layout_weight="1" android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceSmall" android:text="Alış"
+                        android:textColor="@color/page2TextColor"></TextView>
+                    <TextView android:background="@drawable/cell_shape_in" android:padding="4dp" android:id="@+id/yk_usd_satis_tv" android:layout_weight="1" android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceSmall" android:text="Satış"
+                        android:textColor="@color/page2TextColor"></TextView>
+                    <TextView android:background="@drawable/cell_shape_in" android:padding="4dp" android:id="@+id/yk_usd_time_tv" android:layout_weight="1" android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceSmall" android:text="Zaman"
+                        android:textColor="@color/page2TextColor"></TextView>
+
+                </TableRow>
+
+                <TableRow android:id="@+id/tableRow4" android:layout_width="match_parent" android:layout_height="wrap_content">
+
+                    <TextView android:background="@drawable/cell_shape" android:padding="4dp" android:id="@+id/textView40" android:layout_weight="1" android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceSmall" android:text="XAU"
+                        android:textColor="@color/page2TextColor"
+                        android:textStyle="bold"></TextView>
+                    <TextView android:background="@drawable/cell_shape_in" android:padding="4dp" android:id="@+id/yk_xau_alis_tv" android:layout_weight="1" android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceSmall" android:text="Alış"
+                        android:textColor="@color/page2TextColor"></TextView>
+                    <TextView android:background="@drawable/cell_shape_in" android:padding="4dp" android:id="@+id/yk_xau_satis_tv" android:layout_weight="1" android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceSmall" android:text="Satış"
+                        android:textColor="@color/page2TextColor"></TextView>
+                    <TextView android:background="@drawable/cell_shape_in" android:padding="4dp" android:id="@+id/yk_xau_time_tv" android:layout_weight="1" android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceSmall" android:text="Zaman"
+                        android:textColor="@color/page2TextColor"></TextView>
+                </TableRow>
+
+                <TableRow android:id="@+id/tableRow21" android:paddingStart="2dp" android:layout_width="match_parent" android:layout_height="wrap_content">
+
+                    <TextView android:background="@drawable/cell_shape" android:padding="4dp" android:id="@+id/textView210" android:layout_weight="1" android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceSmall" android:text="Enpara(FB)"
+                        android:textColor="@color/page2TextColor"
+                        android:textStyle="bold"></TextView>
+                    <TextView android:background="@drawable/cell_shape" android:padding="4dp" android:id="@+id/textView211" android:layout_weight="1" android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceSmall" android:text="Alış"
+                        android:textColor="@color/page2TextColor"
+                        android:textStyle="bold"></TextView>
+                    <TextView android:background="@drawable/cell_shape" android:padding="4dp" android:id="@+id/textView212" android:layout_weight="1" android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceSmall" android:text="Satış"
+                        android:textColor="@color/page2TextColor"
+                        android:textStyle="bold"></TextView>
+                    <TextView android:background="@drawable/cell_shape" android:padding="4dp" android:id="@+id/textView213" android:layout_weight="1" android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceSmall" android:text="Zaman"
+                        android:textColor="@color/page2TextColor"
+                        android:textStyle="bold"></TextView>
+                </TableRow>
+
+                <TableRow android:id="@+id/tableRow22" android:layout_width="match_parent" android:layout_height="wrap_content">
+
+                    <TextView android:background="@drawable/cell_shape" android:padding="4dp" android:id="@+id/textView220" android:layout_weight="1" android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceSmall" android:text="EUR"
+                        android:textColor="@color/page2TextColor"
+                        android:textStyle="bold"></TextView>
+                    <TextView android:background="@drawable/cell_shape_in" android:padding="4dp" android:id="@+id/enpara_eur_alis_tv" android:layout_weight="1" android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceSmall" android:text="Alış"
+                        android:textColor="@color/page2TextColor"></TextView>
+                    <TextView android:background="@drawable/cell_shape_in" android:padding="4dp" android:id="@+id/enpara_eur_satis_tv" android:layout_weight="1" android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceSmall" android:text="Satış"
+                        android:textColor="@color/page2TextColor"></TextView>
+                    <TextView android:background="@drawable/cell_shape_in" android:padding="4dp" android:id="@+id/enpara_eur_time_tv" android:layout_weight="1" android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceSmall" android:text="Zaman"
+                        android:textColor="@color/page2TextColor"></TextView>
+
+                </TableRow>
+
+                <TableRow android:id="@+id/tableRow23" android:layout_width="match_parent" android:layout_height="wrap_content">
+
+                    <TextView android:background="@drawable/cell_shape" android:padding="4dp" android:id="@+id/textView230" android:layout_weight="1" android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceSmall" android:text="USD"
+                        android:textColor="@color/page2TextColor"
+                        android:textStyle="bold"></TextView>
+                    <TextView android:background="@drawable/cell_shape_in" android:padding="4dp" android:id="@+id/enpara_usd_alis_tv" android:layout_weight="1" android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceSmall" android:text="Alış"
+                        android:textColor="@color/page2TextColor"></TextView>
+                    <TextView android:background="@drawable/cell_shape_in" android:padding="4dp" android:id="@+id/enpara_usd_satis_tv" android:layout_weight="1" android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceSmall" android:text="Satış"
+                        android:textColor="@color/page2TextColor"></TextView>
+                    <TextView android:background="@drawable/cell_shape_in" android:padding="4dp" android:id="@+id/enpara_usd_time_tv" android:layout_weight="1" android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceSmall" android:text="Zaman"
+                        android:textColor="@color/page2TextColor"></TextView>
+
+                </TableRow>
+
+                <TableRow android:id="@+id/tableRow24" android:layout_width="match_parent" android:layout_height="wrap_content">
+
+                    <TextView android:background="@drawable/cell_shape" android:padding="4dp" android:id="@+id/textView240" android:layout_weight="1" android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceSmall" android:text="XAU"
+                        android:textColor="@color/page2TextColor"
+                        android:textStyle="bold"></TextView>
+                    <TextView android:background="@drawable/cell_shape_in" android:padding="4dp" android:id="@+id/enpara_xau_alis_tv" android:layout_weight="1" android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceSmall" android:text="Alış"
+                        android:textColor="@color/page2TextColor"></TextView>
+                    <TextView android:background="@drawable/cell_shape_in" android:padding="4dp" android:id="@+id/enpara_xau_satis_tv" android:layout_weight="1" android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceSmall" android:text="Satış"
+                        android:textColor="@color/page2TextColor"></TextView>
+                    <TextView android:background="@drawable/cell_shape_in" android:padding="4dp" android:id="@+id/enpara_xau_time_tv" android:layout_weight="1" android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceSmall" android:text="Zaman"
+                        android:textColor="@color/page2TextColor"></TextView>
+                </TableRow>
+            </TableLayout>
+
+</LinearLayout>

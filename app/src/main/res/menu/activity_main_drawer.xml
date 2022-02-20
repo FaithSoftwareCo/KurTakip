@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item android:id="@+id/nav_preferences" android:icon="@android:drawable/ic_menu_compass"
+        android:title="@string/piyasalar" />
+        <item android:id="@+id/nav_bitcoin" android:icon="@android:drawable/ic_menu_compass"
+        android:title="@string/bitcoin" />
+        <item android:id="@+id/nav_newsfeed" android:icon="@android:drawable/ic_menu_compass"
+            android:title="@string/news_feed" />
+        <item android:id="@+id/nav_graphics" android:icon="@android:drawable/ic_menu_mapmode"
+            android:title="@string/graphical_view" />
+        <item android:id="@+id/nav_indexes" android:icon="@android:drawable/ic_menu_slideshow"
+            android:title="@string/borsalar" />
+        <item android:id="@+id/nav_last_data" android:icon="@android:drawable/ic_media_ff"
+            android:title="@string/verilerim" />
+        <item android:id="@+id/nav_converter" android:icon="@android:drawable/ic_menu_rotate"
+            android:title="@string/convert" />
+        <item android:id="@+id/nav_about" android:icon="@android:drawable/ic_menu_info_details"
+            android:title="@string/about" />
+        <item android:id="@+id/nav_exit" android:icon="@android:drawable/ic_delete"
+            android:title="@string/exit" />
+    </group>
+
+</menu>
