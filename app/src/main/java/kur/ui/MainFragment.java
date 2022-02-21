@@ -2,10 +2,11 @@ package kur.ui;
 
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -20,6 +21,10 @@ import android.widget.Button;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+
 import java.util.List;
 import java.util.Locale;
 
@@ -33,6 +38,7 @@ import kur.task.DownloadExchangeValuesTask;
 /**
  * Created by Fatih on 28.11.2016.
  */
+
 public class MainFragment extends Fragment implements View.OnClickListener {
     private Button btnDownloadStart = null;
 
@@ -255,17 +261,30 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     public void investingSiteClicked(/*View view*/) {
         //String url = "http://fxrates.tr.forexprostools.com/index.php?force_lang=10&pairs_ids=66;50655;18;1;&header-text-color=%23000000&header-bg=%23b2daec&curr-name-color=%230059b0&inner-text-color=%23000000&green-text-color=%232A8215&green-background=%23B7F4C2&red-text-color=%23DC0001&red-background=%23FFE2E2&inner-border-color=%23CBCBCB&border-color=%23156ca6&bg1=%23F6F6F6&bg2=%23ffffff&bid=show&ask=show&last=hide&open=hide&high=hide&low=hide&change=hide&last_update=show";
 
-        final String investingurl = "https://tr.widgets.investing.com/live-currency-cross-rates?theme=lightTheme&hideTitle=true&roundedCorners=true&cols=bid,ask,changePerc,time&pairs=18,66,50655,1&border-color=%23156ca6";
+        String investingurl = "https://tr.widgets.investing.com/live-currency-cross-rates?theme=lightTheme&hideTitle=true&roundedCorners=true&cols=bid,ask,changePerc,time&pairs=18,66,50655,1&border-color=%23156ca6";
 
-        //String url = "file:///android_asset/exchanges.html";
         firstErrDetected = false;
-        String url = "http://fxrates.tr.forexprostools.com/index.php?force_lang=10&pairs_ids=66;50655;18;1;21;&header-text-color=%23000000&header-bg=%23b2daec&curr-name-color=%230059b0&inner-text-color=%23000000&green-text-color=%232A8215&green-background=%23B7F4C2&red-text-color=%23DC0001&red-background=%23FFE2E2&inner-border-color=%23CBCBCB&border-color=%23156ca6&bg1=%23F6F6F6&bg2=%23ffffff&bid=show&ask=show&last=hide&open=hide&high=hide&low=hide&change=hide&last_update=show";
-        MainActivity.webview.loadUrl(url);
+        //String url = "http://fxrates.tr.forexprostools.com/index.php?force_lang=10&pairs_ids=66;50655;18;1;21;&header-text-color=%23000000&header-bg=%23b2daec&curr-name-color=%230059b0&inner-text-color=%23000000&green-text-color=%232A8215&green-background=%23B7F4C2&red-text-color=%23DC0001&red-background=%23FFE2E2&inner-border-color=%23CBCBCB&border-color=%23156ca6&bg1=%23F6F6F6&bg2=%23ffffff&bid=show&ask=show&last=hide&open=hide&high=hide&low=hide&change=hide&last_update=show";
+        MainActivity.webview.loadUrl(investingurl);
 
 
         MainActivity.webview.setWebViewClient(new WebViewClient() {
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-                MainActivity.webview.loadUrl(investingurl);
+                loadSecondaryPage();
+            }
+
+            private void loadSecondaryPage() {
+
+                try {
+                    String investingurl = "file:///android_asset/kurlar.html";
+                    MainActivity.webview.loadUrl(investingurl);
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+
+
             }
 
             @Override
@@ -273,7 +292,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 super.onReceivedHttpError(view, request, errorResponse);
                 if(!firstErrDetected)
                 {
-                    MainActivity.webview.loadUrl(investingurl);
+                    loadSecondaryPage();
                 }
                 firstErrDetected = true;
             }
