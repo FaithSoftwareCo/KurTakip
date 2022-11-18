@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
 
 
     defaultConfig {
         applicationId 'kur.main'
         minSdkVersion 24
-        targetSdkVersion 30
+        targetSdkVersion 31
         buildConfigField "long", "TIMESTAMP", System.currentTimeMillis() + "L"
     }
 

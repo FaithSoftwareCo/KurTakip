@@ -68,6 +68,9 @@ public class MainActivity extends AppCompatActivity {
                 else if (id == R.id.nav_graphics) {
                     OpenGraphicsFragment();
                 }
+                else if (id == R.id.nav_newsfeed) {
+                    OpenNewsFeedFragment();
+                }
                 else if (id == R.id.nav_last_data) {
                     OpenBankGraphicsFragment();
                 }

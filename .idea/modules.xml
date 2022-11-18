@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/MyNavigationDrawer.iml" filepath="$PROJECT_DIR$/MyNavigationDrawer.iml" group="MyNavigationDrawer" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="MyNavigationDrawer/app" />
+      <module fileurl="file://$PROJECT_DIR$/MyNavigationDrawer.iml" filepath="$PROJECT_DIR$/MyNavigationDrawer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/MyNavigationDrawer.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/MyNavigationDrawer.app.iml" />
     </modules>
   </component>
 </project>

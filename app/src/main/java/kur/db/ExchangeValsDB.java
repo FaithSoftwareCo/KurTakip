@@ -170,22 +170,22 @@ public class ExchangeValsDB extends SQLiteOpenHelper {
 
                 String alis = cursor.getString(2);
                 String satis = cursor.getString(3);
-                alis = String.format("%.4f", Float.parseFloat(alis.replace(',', '.')));
-                satis = String.format("%.4f", Float.parseFloat(satis.replace(',', '.')));
+                alis = parseFloatString(4, alis);
+                satis = parseFloatString(4, satis);
                 exchangeValue.exchangeSet[EXCHANGE_TYPES.EUR].alis = alis;
                 exchangeValue.exchangeSet[EXCHANGE_TYPES.EUR].satis = satis;
 
                 alis = cursor.getString(4);
                 satis = cursor.getString(5);
-                alis = String.format("%.4f", Float.parseFloat(alis.replace(',', '.')));
-                satis = String.format("%.4f", Float.parseFloat(satis.replace(',', '.')));
+                alis = parseFloatString(4, alis);
+                satis = parseFloatString(4, satis);
                 exchangeValue.exchangeSet[EXCHANGE_TYPES.USD].alis = alis;
                 exchangeValue.exchangeSet[EXCHANGE_TYPES.USD].satis = satis;
 
                 alis = cursor.getString(6);
                 satis = cursor.getString(7);
-                alis = String.format("%.2f", Float.parseFloat(alis.replace(',', '.')));
-                satis = String.format("%.2f", Float.parseFloat(satis.replace(',', '.')));
+                alis = parseFloatString(2, alis);
+                satis = parseFloatString(2, satis);
                 exchangeValue.exchangeSet[EXCHANGE_TYPES.XAU].alis = alis;
                 exchangeValue.exchangeSet[EXCHANGE_TYPES.XAU].satis = satis;
 
@@ -201,6 +201,18 @@ public class ExchangeValsDB extends SQLiteOpenHelper {
 
         // return books
         return exchanges;
+    }
+
+    private String parseFloatString(int fieldSize, String alissatis) {
+        try
+        {
+            String format = "%." + fieldSize + "f";
+            return String.format(format, Float.parseFloat(alissatis.replace(".", "").replace(',', '.')));
+        }
+         catch(Exception ex)
+         {
+            return  "0";
+         }
     }
 
     @Override

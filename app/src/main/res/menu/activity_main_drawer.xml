@@ -7,9 +7,9 @@
         <item android:id="@+id/nav_bitcoin" android:icon="@android:drawable/ic_menu_compass"
         android:title="@string/bitcoin" />
         <item android:id="@+id/nav_newsfeed" android:icon="@android:drawable/ic_menu_compass"
-            android:title="@string/news_feed" />
+            android:title="@string/news_feed"/>
         <item android:id="@+id/nav_graphics" android:icon="@android:drawable/ic_menu_mapmode"
-            android:title="@string/graphical_view" />
+            android:title="@string/graphical_view"  android:visible="false"/>
         <item android:id="@+id/nav_indexes" android:icon="@android:drawable/ic_menu_slideshow"
             android:title="@string/borsalar" />
         <item android:id="@+id/nav_last_data" android:icon="@android:drawable/ic_media_ff"

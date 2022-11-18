@@ -51,6 +51,7 @@ import kur.main.R;
  */
 public class GraphicsBanksFragment extends Fragment implements SeekBar.OnSeekBarChangeListener,
         OnChartValueSelectedListener {
+    private static final float MAXIMUM_Y = 1250f;
     private LineChart mChart;
     private SeekBar mSeekBarX, mSeekBarY;
     private TextView tvX, tvY;
@@ -101,7 +102,7 @@ public class GraphicsBanksFragment extends Fragment implements SeekBar.OnSeekBar
         // add data
         setData(50);
 
-        mChart.animateX(2500);
+        mChart.animateX(1000);
 
         // get the legend (only possible after setting data)
         Legend l = mChart.getLegend();
@@ -127,16 +128,16 @@ public class GraphicsBanksFragment extends Fragment implements SeekBar.OnSeekBar
         YAxis leftAxis = mChart.getAxisLeft();
         leftAxis.setTypeface(mTfLight);
         leftAxis.setTextColor(ColorTemplate.getHoloBlue());
-        leftAxis.setAxisMaximum(2000f);
-        leftAxis.setAxisMinimum(100f);
+        leftAxis.setAxisMaximum(MAXIMUM_Y);
+        //leftAxis.setAxisMinimum(1f);
         leftAxis.setDrawGridLines(true);
         leftAxis.setGranularityEnabled(true);
 
         YAxis rightAxis = mChart.getAxisRight();
         rightAxis.setTypeface(mTfLight);
         rightAxis.setTextColor(Color.RED);
-        rightAxis.setAxisMaximum(2000f);
-        rightAxis.setAxisMinimum(100f);
+        rightAxis.setAxisMaximum(MAXIMUM_Y);
+        //rightAxis.setAxisMinimum(1f);
         rightAxis.setDrawGridLines(false);
         rightAxis.setDrawZeroLine(false);
         rightAxis.setGranularityEnabled(false);
@@ -170,11 +171,11 @@ public class GraphicsBanksFragment extends Fragment implements SeekBar.OnSeekBar
 
             double val = Double.valueOf(listExchanges.get(listExchanges.size() - i - 1).exchangeSet[EXCHANGE_TYPES.USD].alis.replace(',', '.'));
             double val_ = Double.valueOf(listExchanges.get(listExchanges.size() - i - 1).exchangeSet[EXCHANGE_TYPES.USD].satis.replace(',', '.'));
-            yVals1.add(new Entry(i, (float)(val+val_)*50));
+            yVals1.add(new Entry(i, (float)(val+val_)/2));
 
             double val2 = Double.valueOf(listExchanges.get(listExchanges.size() - i - 1).exchangeSet[EXCHANGE_TYPES.EUR].alis.replace(',', '.'));
             double val2_ = Double.valueOf(listExchanges.get(listExchanges.size() - i - 1).exchangeSet[EXCHANGE_TYPES.EUR].satis.replace(',', '.'));
-            yVals2.add(new Entry(i, (float)(val2+val2_)*50));
+            yVals2.add(new Entry(i, (float)(val2+val2_)/2));
 
             double val3 = Double.valueOf(listExchanges.get(listExchanges.size() - i - 1).exchangeSet[EXCHANGE_TYPES.XAU].alis.replace(',', '.'));
             double val3_ = Double.valueOf(listExchanges.get(listExchanges.size() - i - 1).exchangeSet[EXCHANGE_TYPES.XAU].satis.replace(',', '.'));
