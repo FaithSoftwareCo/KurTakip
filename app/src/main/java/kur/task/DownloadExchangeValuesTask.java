@@ -1,9 +1,7 @@
 package kur.task;
 
+import android.database.sqlite.SQLiteConstraintException;
 import android.os.AsyncTask;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 
 import org.jsoup.Jsoup;
@@ -11,6 +9,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
@@ -27,6 +26,7 @@ import kur.ui.MainFragment;
 public class DownloadExchangeValuesTask extends AsyncTask<Void, Void, String> {
     public static ExchangeValue ykbExchange = new ExchangeValue(ExchangeSourceBank.YK_BANK);
     public static ExchangeValue enparaExchange = new ExchangeValue(ExchangeSourceBank.ENPARA_BANK);
+    public static ExchangeValue kuveytExchange = new ExchangeValue(ExchangeSourceBank.KUVEYT_BANK);
     private MainFragment.FragmentCallback mFragmentCallback;
 
     public DownloadExchangeValuesTask(MainFragment.FragmentCallback fragmentCallback) {
@@ -37,7 +37,7 @@ public class DownloadExchangeValuesTask extends AsyncTask<Void, Void, String> {
     protected String doInBackground(Void... urls) {
         String response = "";
         String EUR_Al, EUR_Sat, USD_Al, USD_Sat, XAU_Al, XAU_Sat, time;
-        Document doc, doc2;
+        Document doc, doc2, doc3;
         try {
             //http://m.tr.investing.com/
 
@@ -45,6 +45,9 @@ public class DownloadExchangeValuesTask extends AsyncTask<Void, Void, String> {
             Element kurTable = doc.getElementById("currencyResultContent");
 
             doc2 = Jsoup.connect("https://www.qnbfinansbank.enpara.com/hesaplar/doviz-ve-altin-kurlari").userAgent("Mozilla").get();
+
+            doc3 = Jsoup.connect("https://www.kuveytturk.com.tr/finans-portali/").userAgent("Mozilla").get();
+
             Elements kurTableEnpara = doc2.getElementsByClass("enpara-gold-exchange-rates__table");
             //Log.e("EXCHANGE ENPARA", ">>>>>:" + kurTableEnpara.text());
             Iterator<Element> iteratorEnpara = kurTableEnpara.select("div.enpara-gold-exchange-rates__table-item").iterator();
@@ -114,26 +117,29 @@ public class DownloadExchangeValuesTask extends AsyncTask<Void, Void, String> {
                }
             }
 
-          /*  iterator.next();
-            iterator.next();
-            USD_Al = iterator.next().text().trim();
-            USD_Sat = iterator.next().text().trim();
-            ykbExchange.setExchangeSetUSD(new ExchangeValueSet(EXCHANGE_TYPES.USD, USD_Al, USD_Sat));
+            // kuveyt
+            Elements kurTableKuveyt = doc3.getElementsByClass("col-md-4 col-sm-6");
 
-            iterator.next();
-            iterator.next();
-            iterator.next();
-            EUR_Al = iterator.next().text().trim();
-            EUR_Sat = iterator.next().text().trim();
-            ykbExchange.setExchangeSetEUR(new ExchangeValueSet(EXCHANGE_TYPES.EUR, EUR_Al, EUR_Sat));
+            USD_Al = kurTableKuveyt.get(0).getElementsByClass("cellbox insidebox").get(0).text().replace("Alış", "").trim();
+            USD_Sat = kurTableKuveyt.get(0).getElementsByClass("cellbox insidebox").get(1).text().replace("Satış", "").trim();
 
-            iterator.next();
-            iterator.next();
-            iterator.next();
-            XAU_Al = iterator.next().text().trim();
-            XAU_Sat = iterator.next().text().trim();
-            ykbExchange.setExchangeSetXAU(new ExchangeValueSet(EXCHANGE_TYPES.XAU, XAU_Al, XAU_Sat));
-*/
+            kuveytExchange.setExchangeSetUSD(new ExchangeValueSet(EXCHANGE_TYPES.USD, USD_Al, USD_Sat));
+
+            EUR_Al = kurTableKuveyt.get(1).getElementsByClass("cellbox insidebox").get(0).text().replace("Alış", "").trim();
+            EUR_Sat = kurTableKuveyt.get(1).getElementsByClass("cellbox insidebox").get(1).text().replace("Satış", "").trim();
+
+            kuveytExchange.setExchangeSetEUR(new ExchangeValueSet(EXCHANGE_TYPES.EUR, EUR_Al, EUR_Sat));
+
+            XAU_Al = kurTableKuveyt.get(2).getElementsByClass("cellbox insidebox").get(0).text().replace("Alış", "").trim();
+            XAU_Sat = kurTableKuveyt.get(2).getElementsByClass("cellbox insidebox").get(1).text().replace("Satış", "").trim();
+
+            kuveytExchange.setExchangeSetXAU(new ExchangeValueSet(EXCHANGE_TYPES.XAU, XAU_Al, XAU_Sat));
+
+            Date date = new Date();
+            DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+            String strDate = dateFormat.format(date);
+            kuveytExchange.setTimeOfExchange(strDate);
+
             //Log.e("EXCHANGE KUR:", ">>>>>:" + kurTable.lastElementSibling().html());
             //Log.e("EXCHANGE", ">>>>>:" + doc.html());
         } catch (Exception e) {
@@ -151,11 +157,31 @@ public class DownloadExchangeValuesTask extends AsyncTask<Void, Void, String> {
         //Log.e("EXCHANGE", "Finito:" + result);
         if (ykbExchange.GetTimeOfExchange().startsWith("HATA") == false) // Ba�lant� Hatas� yoksa
         {
-            ExchangeValsDB.GetInstance().addExchangeValuetoDB(ykbExchange);
-            Log.e("YKB ADDED to db time:", ykbExchange.GetTimeOfExchange() + " ->" + ykbExchange.toString());
+            try
+            {
+                ExchangeValsDB.GetInstance().addExchangeValuetoDB(ykbExchange);
+                Log.e("YKB ADDED to db time:", ykbExchange.GetTimeOfExchange() + " ->" + ykbExchange.toString());
+            } catch (SQLiteConstraintException ex)
+            {
+                Log.e("YKB NOT !!! ADDED to db time:", ykbExchange.GetTimeOfExchange() + " ->" + ykbExchange.toString());
+            }
 
-            ExchangeValsDB.GetInstance().addExchangeValuetoDB(enparaExchange);
-            Log.e("ENPARA ADDED db time:", enparaExchange.GetTimeOfExchange() + " ->" + enparaExchange.toString());
+            try {
+                ExchangeValsDB.GetInstance().addExchangeValuetoDB(enparaExchange);
+                Log.e("ENPARA ADDED db time:", enparaExchange.GetTimeOfExchange() + " ->" + enparaExchange.toString());
+            } catch (SQLiteConstraintException ex)
+            {
+                Log.e("ENPARA NOT !!!! ADDED db time:", enparaExchange.GetTimeOfExchange() + " ->" + enparaExchange.toString());
+            }
+
+            try {
+                ExchangeValsDB.GetInstance().addExchangeValuetoDB(kuveytExchange);
+                Log.e("KUVEYT ADDED db time:", kuveytExchange.GetTimeOfExchange() + " ->" + kuveytExchange.toString());
+            } catch (SQLiteConstraintException ex)
+            {
+                Log.e("KUVEYT NOT !!! ADDED db time:", kuveytExchange.GetTimeOfExchange() + " ->" + kuveytExchange.toString());
+            }
+
         }
 
         try {

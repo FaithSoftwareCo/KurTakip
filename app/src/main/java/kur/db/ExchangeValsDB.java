@@ -62,7 +62,8 @@ public class ExchangeValsDB extends SQLiteOpenHelper {
         values.put(KEY_XAU_AL, exchangeValue.exchangeSet[EXCHANGE_TYPES.XAU].alis);
         values.put(KEY_XAU_SAT, exchangeValue.exchangeSet[EXCHANGE_TYPES.XAU].satis);
 
-        if (exchangeValue.getBankSource() == ExchangeSourceBank.YK_BANK &&
+        if ((exchangeValue.getBankSource() == ExchangeSourceBank.YK_BANK ||
+                exchangeValue.getBankSource() == ExchangeSourceBank.KUVEYT_BANK)  &&
                 exchangeValue.UpdateTimeStr.matches("\\d{2}.\\d{2}.\\d{4} \\d{2}:\\d{2}:\\d{2}")) {
             // Convert time format 31.07.2014 13:22:00 YKB
             // To format 2014-07-31 13:22:00
@@ -82,11 +83,12 @@ public class ExchangeValsDB extends SQLiteOpenHelper {
                         null, //nullColumnHack
                         values); // key/value -> keys = column names/ values = column values
 
-            } catch (ParseException e) {
+            } catch (Exception e) {
                 // TODO Auto-generated catch block
-                //e.printStackTrace();
+                Log.d("EXCHANGE", "Add Exchange value to DB is failed for>" + exchangeValue.getBankSource().name());
+                e.printStackTrace();
             }
-        } else if (exchangeValue.getBankSource() == ExchangeSourceBank.ENPARA_BANK &&
+        } else if ((exchangeValue.getBankSource() == ExchangeSourceBank.ENPARA_BANK) &&
                 exchangeValue.UpdateTimeStr.matches("\\d{2}.\\d{2}.\\d{4}-\\d{2}:\\d{2}")) {
             // 01.08.2015-23:55 ENPARA
 
@@ -105,9 +107,10 @@ public class ExchangeValsDB extends SQLiteOpenHelper {
                         null, //nullColumnHack
                         values); // key/value -> keys = column names/ values = column values
 
-            } catch (ParseException e) {
+            } catch (Exception e) {
                 // TODO Auto-generated catch block
-                //e.printStackTrace();
+                Log.d("EXCHANGE", "Add Exchange value to DB is failed for>" + exchangeValue.getBankSource().name());
+                e.printStackTrace();
             }
         } else {
             Log.d("EXCHANGE", "Add Exchange value to DB is failed for>" + exchangeValue.getBankSource().name());
@@ -166,7 +169,12 @@ public class ExchangeValsDB extends SQLiteOpenHelper {
             do {
                 exchangeValue = new ExchangeValue();
                 exchangeValue.setId(Integer.parseInt(cursor.getString(0)));
-                exchangeValue.setBankSource((cursor.getString(1) == ExchangeSourceBank.ENPARA_BANK.name()) ? ExchangeSourceBank.ENPARA_BANK : ExchangeSourceBank.YK_BANK);
+                if(cursor.getString(1) == ExchangeSourceBank.YK_BANK.name())
+                    exchangeValue.setBankSource(ExchangeSourceBank.YK_BANK);
+                else if(cursor.getString(1) == ExchangeSourceBank.ENPARA_BANK.name())
+                    exchangeValue.setBankSource(ExchangeSourceBank.ENPARA_BANK);
+                else if(cursor.getString(1) == ExchangeSourceBank.KUVEYT_BANK.name())
+                    exchangeValue.setBankSource(ExchangeSourceBank.KUVEYT_BANK);
 
                 String alis = cursor.getString(2);
                 String satis = cursor.getString(3);

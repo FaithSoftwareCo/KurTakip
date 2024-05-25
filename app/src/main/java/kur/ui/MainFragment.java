@@ -31,6 +31,7 @@ import java.util.Locale;
 import kur.db.ExchangeSourceBank;
 import kur.db.ExchangeValsDB;
 import kur.db.ExchangeValue;
+import kur.db.ExchangeValueSet;
 import kur.main.EXCHANGE_TYPES;
 import kur.main.R;
 import kur.task.DownloadExchangeValuesTask;
@@ -68,7 +69,9 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     }
 
     TextView yk_eur_alis_tv = null;
+    TextView yk_eur_fark_tv = null;
     TextView yk_usd_alis_tv = null;
+    TextView yk_usd_fark_tv = null;
     TextView yk_xau_alis_tv = null;
     TextView yk_eur_satis_tv = null;
     TextView yk_usd_satis_tv = null;
@@ -76,6 +79,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     TextView yk_eur_time_tv = null;
     TextView yk_usd_time_tv = null;
     TextView yk_xau_time_tv = null;
+    TextView yk_xau_fark_tv = null;
 
     TextView enpara_eur_alis_tv = null;
     TextView enpara_usd_alis_tv = null;
@@ -84,9 +88,24 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     TextView enpara_usd_satis_tv = null;
     TextView enpara_xau_satis_tv = null;
     TextView enpara_eur_time_tv = null;
+    TextView enpara_eur_fark_tv = null;
     TextView enpara_usd_time_tv = null;
+    TextView enpara_usd_fark_tv = null;
     TextView enpara_xau_time_tv = null;
+    TextView enpara_xau_fark_tv = null;
 
+    TextView kuveyt_eur_alis_tv = null;
+    TextView kuveyt_usd_alis_tv = null;
+    TextView kuveyt_xau_alis_tv = null;
+    TextView kuveyt_eur_satis_tv = null;
+    TextView kuveyt_usd_satis_tv = null;
+    TextView kuveyt_xau_satis_tv = null;
+    TextView kuveyt_eur_time_tv = null;
+    TextView kuveyt_eur_fark_tv = null;
+    TextView kuveyt_usd_time_tv = null;
+    TextView kuveyt_usd_fark_tv = null;
+    TextView kuveyt_xau_time_tv = null;
+    TextView kuveyt_xau_fark_tv = null;
     static boolean firstErrDetected = false;
 
     @Nullable
@@ -113,6 +132,28 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         enpara_xau_alis_tv = (TextView) rootView.findViewById(R.id.enpara_xau_alis_tv);
         enpara_xau_satis_tv = (TextView) rootView.findViewById(R.id.enpara_xau_satis_tv);
         enpara_xau_time_tv = (TextView) rootView.findViewById(R.id.enpara_xau_time_tv);
+
+        kuveyt_eur_alis_tv = (TextView) rootView.findViewById(R.id.kuveyt_eur_alis_tv);
+        kuveyt_eur_satis_tv = (TextView) rootView.findViewById(R.id.kuveyt_eur_satis_tv);
+        kuveyt_eur_time_tv = (TextView) rootView.findViewById(R.id.kuveyt_eur_time_tv);
+        kuveyt_usd_alis_tv = (TextView) rootView.findViewById(R.id.kuveyt_usd_alis_tv);
+        kuveyt_usd_satis_tv = (TextView) rootView.findViewById(R.id.kuveyt_usd_satis_tv);
+        kuveyt_usd_time_tv = (TextView) rootView.findViewById(R.id.kuveyt_usd_time_tv);
+        kuveyt_xau_alis_tv = (TextView) rootView.findViewById(R.id.kuveyt_xau_alis_tv);
+        kuveyt_xau_satis_tv = (TextView) rootView.findViewById(R.id.kuveyt_xau_satis_tv);
+        kuveyt_xau_time_tv = (TextView) rootView.findViewById(R.id.kuveyt_xau_time_tv);
+
+        yk_usd_fark_tv = (TextView) rootView.findViewById(R.id.yk_usd_fark_tv);
+        yk_eur_fark_tv = (TextView) rootView.findViewById(R.id.yk_eur_fark_tv);
+        yk_xau_fark_tv = (TextView) rootView.findViewById(R.id.yk_xau_fark_tv);
+
+        enpara_usd_fark_tv = (TextView) rootView.findViewById(R.id.enpara_usd_fark_tv);
+        enpara_eur_fark_tv = (TextView) rootView.findViewById(R.id.enpara_eur_fark_tv);
+        enpara_xau_fark_tv = (TextView) rootView.findViewById(R.id.enpara_xau_fark_tv);
+
+        kuveyt_usd_fark_tv = (TextView) rootView.findViewById(R.id.kuveyt_usd_fark_tv);
+        kuveyt_eur_fark_tv = (TextView) rootView.findViewById(R.id.kuveyt_eur_fark_tv);
+        kuveyt_xau_fark_tv = (TextView) rootView.findViewById(R.id.kuveyt_xau_fark_tv);
 
         btnDownloadStart = (Button) rootView.findViewById(R.id.btn_start);
         btnDownloadStart.setOnClickListener(onStartDownloadListener());
@@ -226,14 +267,17 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 lastExchange = list.get(0);
                 yk_eur_alis_tv.setText(lastExchange.exchangeSet[EXCHANGE_TYPES.EUR].alis);
                 yk_eur_satis_tv.setText(lastExchange.exchangeSet[EXCHANGE_TYPES.EUR].satis);
+                yk_eur_fark_tv.setText(calcFarkRatio(lastExchange.exchangeSet[EXCHANGE_TYPES.EUR]));
                 yk_eur_time_tv.setText(lastExchange.GetTimeOnlyOfExchange());
 
                 yk_usd_alis_tv.setText(lastExchange.exchangeSet[EXCHANGE_TYPES.USD].alis);
                 yk_usd_satis_tv.setText(lastExchange.exchangeSet[EXCHANGE_TYPES.USD].satis);
+                yk_usd_fark_tv.setText(calcFarkRatio(lastExchange.exchangeSet[EXCHANGE_TYPES.USD]));
                 yk_usd_time_tv.setText(lastExchange.GetTimeOnlyOfExchange());
 
                 yk_xau_alis_tv.setText(lastExchange.exchangeSet[EXCHANGE_TYPES.XAU].alis);
                 yk_xau_satis_tv.setText(lastExchange.exchangeSet[EXCHANGE_TYPES.XAU].satis);
+                yk_xau_fark_tv.setText(calcFarkRatio(lastExchange.exchangeSet[EXCHANGE_TYPES.XAU]));
                 yk_xau_time_tv.setText(lastExchange.GetTimeOnlyOfExchange());
 
                 bank = ExchangeSourceBank.ENPARA_BANK;
@@ -241,21 +285,47 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 lastExchange = ExchangeValsDB.GetInstance().getLastExchanges(bank, 1).get(0);
                 enpara_eur_alis_tv.setText(lastExchange.exchangeSet[EXCHANGE_TYPES.EUR].alis);
                 enpara_eur_satis_tv.setText(lastExchange.exchangeSet[EXCHANGE_TYPES.EUR].satis);
+                enpara_eur_fark_tv.setText(calcFarkRatio(lastExchange.exchangeSet[EXCHANGE_TYPES.EUR]));
                 enpara_eur_time_tv.setText(lastExchange.GetTimeOnlyOfExchange());
 
                 enpara_usd_alis_tv.setText(lastExchange.exchangeSet[EXCHANGE_TYPES.USD].alis);
                 enpara_usd_satis_tv.setText(lastExchange.exchangeSet[EXCHANGE_TYPES.USD].satis);
+                enpara_usd_fark_tv.setText(calcFarkRatio(lastExchange.exchangeSet[EXCHANGE_TYPES.USD]));
                 enpara_usd_time_tv.setText(lastExchange.GetTimeOnlyOfExchange());
 
                 enpara_xau_alis_tv.setText(lastExchange.exchangeSet[EXCHANGE_TYPES.XAU].alis);
                 enpara_xau_satis_tv.setText(lastExchange.exchangeSet[EXCHANGE_TYPES.XAU].satis);
+                enpara_xau_fark_tv.setText(calcFarkRatio(lastExchange.exchangeSet[EXCHANGE_TYPES.XAU]));
                 enpara_xau_time_tv.setText(lastExchange.GetTimeOnlyOfExchange());
+
+                bank = ExchangeSourceBank.KUVEYT_BANK;
+
+                lastExchange = ExchangeValsDB.GetInstance().getLastExchanges(bank, 1).get(0);
+                kuveyt_eur_alis_tv.setText(lastExchange.exchangeSet[EXCHANGE_TYPES.EUR].alis);
+                kuveyt_eur_satis_tv.setText(lastExchange.exchangeSet[EXCHANGE_TYPES.EUR].satis);
+                kuveyt_eur_fark_tv.setText(calcFarkRatio(lastExchange.exchangeSet[EXCHANGE_TYPES.EUR]));
+                kuveyt_eur_time_tv.setText(lastExchange.GetTimeOnlyOfExchange());
+
+                kuveyt_usd_alis_tv.setText(lastExchange.exchangeSet[EXCHANGE_TYPES.USD].alis);
+                kuveyt_usd_satis_tv.setText(lastExchange.exchangeSet[EXCHANGE_TYPES.USD].satis);
+                kuveyt_usd_fark_tv.setText(calcFarkRatio(lastExchange.exchangeSet[EXCHANGE_TYPES.USD]));
+                kuveyt_usd_time_tv.setText(lastExchange.GetTimeOnlyOfExchange());
+
+                kuveyt_xau_alis_tv.setText(lastExchange.exchangeSet[EXCHANGE_TYPES.XAU].alis);
+                kuveyt_xau_satis_tv.setText(lastExchange.exchangeSet[EXCHANGE_TYPES.XAU].satis);
+                kuveyt_xau_fark_tv.setText(calcFarkRatio(lastExchange.exchangeSet[EXCHANGE_TYPES.XAU]));
+                kuveyt_xau_time_tv.setText(lastExchange.GetTimeOnlyOfExchange());
             }
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
+    }
+
+    private String calcFarkRatio(ExchangeValueSet exchangeValueSet) {
+        double ratio = (Double.valueOf(exchangeValueSet.satis)-Double.valueOf(exchangeValueSet.alis)) / Double.valueOf(exchangeValueSet.alis);
+        return String.format( "%.2f", ratio*100);
     }
 
     public void investingSiteClicked(/*View view*/) {
@@ -274,7 +344,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             }
 
             private void loadSecondaryPage() {
-
                 try {
                     String investingurl = "file:///android_asset/kurlar.html";
                     MainActivity.webview.loadUrl(investingurl);
@@ -283,8 +352,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 {
                     e.printStackTrace();
                 }
-
-
             }
 
             @Override

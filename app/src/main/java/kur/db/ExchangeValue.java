@@ -58,7 +58,7 @@ public class ExchangeValue {
     @Override
     public String toString() {
         String retStr = "";
-        retStr = (bankSource == ExchangeSourceBank.YK_BANK) ? "YKB" : "ENPARA" + " ";
+        retStr = (bankSource == ExchangeSourceBank.YK_BANK) ? "YK_BANK" : (bankSource == ExchangeSourceBank.KUVEYT_BANK ?"KUVEYT" : "ENPARA") + " ";
         for (int i = 0; i < EXCHANGE_TYPES.NUMBER_OF_EXCHANGES; i++) {
             retStr += " " + EXCHANGE_TYPES.ToString(i) + this.exchangeSet[i].alis + " - " + this.exchangeSet[i].satis + " ||| ";
         }
