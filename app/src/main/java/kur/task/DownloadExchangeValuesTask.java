@@ -4,16 +4,24 @@ import android.database.sqlite.SQLiteConstraintException;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import kur.db.ExchangeSourceBank;
 import kur.db.ExchangeValsDB;
@@ -22,6 +30,7 @@ import kur.db.ExchangeValueSet;
 import kur.main.EXCHANGE_TYPES;
 import kur.ui.MainFragment;
 
+import org.json.JSONArray;
 
 public class DownloadExchangeValuesTask extends AsyncTask<Void, Void, String> {
     public static ExchangeValue ykbExchange = new ExchangeValue(ExchangeSourceBank.YK_BANK);
@@ -35,121 +44,177 @@ public class DownloadExchangeValuesTask extends AsyncTask<Void, Void, String> {
 
     @Override
     protected String doInBackground(Void... urls) {
-        String response = "";
-        String EUR_Al, EUR_Sat, USD_Al, USD_Sat, XAU_Al, XAU_Sat, time;
-        Document doc, doc2, doc3;
-        try {
-            //http://m.tr.investing.com/
+        ExecutorService executor = Executors.newFixedThreadPool(3);
 
-            doc = Jsoup.connect("https://www.yapikredi.com.tr/yatirimci-kosesi/doviz-bilgileri.aspx?section=internet").userAgent("Mozilla").get();
-            Element kurTable = doc.getElementById("currencyResultContent");
+        Callable<Void> yapiKrediTask = new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
+                try{
+                    DownloadExchangeValuesTask.this.scrapeYapiKredi();
+                }
+                catch (Exception ex)
+                {
+                    ex.printStackTrace();
+                    Log.e("ERROR::", "Error reading HTML");
+                    ykbExchange.setTimeOfExchange("Error");
+                }
 
-            doc2 = Jsoup.connect("https://www.qnbfinansbank.enpara.com/hesaplar/doviz-ve-altin-kurlari").userAgent("Mozilla").get();
-
-            doc3 = Jsoup.connect("https://www.kuveytturk.com.tr/finans-portali/").userAgent("Mozilla").get();
-
-            Elements kurTableEnpara = doc2.getElementsByClass("enpara-gold-exchange-rates__table");
-            //Log.e("EXCHANGE ENPARA", ">>>>>:" + kurTableEnpara.text());
-            Iterator<Element> iteratorEnpara = kurTableEnpara.select("div.enpara-gold-exchange-rates__table-item").iterator();
-
-            //String lastUpdateTimeEnparaStr = doc2.select("p:matchesOwn(Son güncellenme tarihi:)").first().text().replace("Son güncellenme tarihi:", "").trim();
-            //enparaExchange.setTimeOfExchange(lastUpdateTimeEnparaStr);
-            //Log.e("EXCHANGE ENPARA", ">>>>> Date:" + lastUpdateTimeEnparaStr);
-            String currentDate = new SimpleDateFormat("dd.MM.yyyy-HH:mm", Locale.getDefault()).format(new Date());
-            enparaExchange.setTimeOfExchange(currentDate);
-
-            //iteratorEnpara.next();
-            String usdStr = iteratorEnpara.next().text().replace("TL", "").replace("USD ($)", "").trim();
-            USD_Al = usdStr.split("\\s+")[0];
-            USD_Sat = usdStr.split("\\s+")[1];
-            enparaExchange.setExchangeSetUSD(new ExchangeValueSet(EXCHANGE_TYPES.USD, USD_Al, USD_Sat));
-
-            // EUR // EUR (€)6,292398  6,777343
-            String eurStr = iteratorEnpara.next().text().replace("TL", "").replace("EUR (€)","").trim();
-            EUR_Al = eurStr.split("\\s+")[0];
-            EUR_Sat = eurStr.split("\\s+")[1];
-            enparaExchange.setExchangeSetEUR(new ExchangeValueSet(EXCHANGE_TYPES.EUR, EUR_Al, EUR_Sat));
-
-            //Altın (gram)272,077994  294,085010
-            //iteratorEnpara.next(); // XAU
-            String xauStr = iteratorEnpara.next().text().replace("TL", "").replace("Altın (gram)","").trim();
-            XAU_Al = xauStr.split("\\s+")[0];
-            XAU_Sat = xauStr.split("\\s+")[1];
-            enparaExchange.setExchangeSetXAU(new ExchangeValueSet(EXCHANGE_TYPES.XAU, XAU_Al, XAU_Sat));
-
-   		  /* YAPI KREDI */
-            //Log.e("EXCHANGE", ">>>>>:" + kurTable.text());
-            //Log.e("EXCHANGE 2", ">>>>>:" + lastUpdateTime.size());
-
-            //Log.e("EXCHANGE KUR3:", ">>>>>:" + kurTable.html());
-            //Log.e("EXCHANGE KUR4:", ">>>>>:" + kurTable.childNodeSize());
-
-            Iterator<Element> iterator = kurTable.select("td").iterator();
-            //time = doc.select("span:matchesOwn(Güncelleme :)").first().text().replace("Güncelleme :", "").trim();
-            time = doc.getElementsByClass("dipnote").text().replace("Güncelleme :", "").trim();;
-            ykbExchange.setTimeOfExchange(time);//nextSibling().toString(); //"";//lastUpdateTime.text();
-
-            Element currIter = null;
-            while((currIter=iterator.next()) != null)
-            {
-                //Log.e("EXCHANGE KUR145:", ">>>>>:" +  currIter.text());
-               if( currIter.text().trim().compareTo("USD") == 0 )
-               {
-                   iterator.next();
-                   USD_Al = iterator.next().text().trim();
-                   USD_Sat = iterator.next().text().trim();
-                   ykbExchange.setExchangeSetUSD(new ExchangeValueSet(EXCHANGE_TYPES.USD, USD_Al, USD_Sat));
-               }
-                else if( currIter.text().trim().compareTo("EUR") == 0 )
-               {
-                   iterator.next();
-                   EUR_Al = iterator.next().text().trim();
-                   EUR_Sat = iterator.next().text().trim();
-                   ykbExchange.setExchangeSetEUR(new ExchangeValueSet(EXCHANGE_TYPES.EUR, EUR_Al, EUR_Sat));
-               }
-               else if( currIter.text().trim().compareTo("XAU") == 0 )
-               {
-                   iterator.next();
-                   XAU_Al = iterator.next().text().trim();
-                   XAU_Sat = iterator.next().text().trim();
-                   ykbExchange.setExchangeSetXAU(new ExchangeValueSet(EXCHANGE_TYPES.XAU, XAU_Al, XAU_Sat));
-                   break;
-               }
+                return null;
             }
+        };
 
-            // kuveyt
-            Elements kurTableKuveyt = doc3.getElementsByClass("col-md-4 col-sm-6");
+        Callable<Void> enparaTask = new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
+                try {
+                    DownloadExchangeValuesTask.this.scrapeEnpara();
+                }
+                catch (Exception ex)
+                {
+                    ex.printStackTrace();
+                    Log.e("ERROR::", "Error reading HTML");
+                    enparaExchange.setTimeOfExchange("Error");
+                }
+                return null;
+            }
+        };
 
-            USD_Al = kurTableKuveyt.get(0).getElementsByClass("cellbox insidebox").get(0).text().replace("Alış", "").trim();
-            USD_Sat = kurTableKuveyt.get(0).getElementsByClass("cellbox insidebox").get(1).text().replace("Satış", "").trim();
+        Callable<Void> kuveytTurkTask = new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
+                try {
+                    DownloadExchangeValuesTask.this.scrapeKuveytTurk();
+                }
+                catch (Exception ex)
+                {
+                    ex.printStackTrace();
+                    Log.e("ERROR::", "Error reading HTML");
+                    kuveytExchange.setTimeOfExchange("Error");
+                }
+                return null;
+            }
+        };
 
-            kuveytExchange.setExchangeSetUSD(new ExchangeValueSet(EXCHANGE_TYPES.USD, USD_Al, USD_Sat));
+        Future<Void> futureYapiKredi = executor.submit(yapiKrediTask);
+        Future<Void> futureEnpara = executor.submit(enparaTask);
+        Future<Void> futureKuveytTurk = executor.submit(kuveytTurkTask);
 
-            EUR_Al = kurTableKuveyt.get(1).getElementsByClass("cellbox insidebox").get(0).text().replace("Alış", "").trim();
-            EUR_Sat = kurTableKuveyt.get(1).getElementsByClass("cellbox insidebox").get(1).text().replace("Satış", "").trim();
-
-            kuveytExchange.setExchangeSetEUR(new ExchangeValueSet(EXCHANGE_TYPES.EUR, EUR_Al, EUR_Sat));
-
-            XAU_Al = kurTableKuveyt.get(2).getElementsByClass("cellbox insidebox").get(0).text().replace("Alış", "").trim();
-            XAU_Sat = kurTableKuveyt.get(2).getElementsByClass("cellbox insidebox").get(1).text().replace("Satış", "").trim();
-
-            kuveytExchange.setExchangeSetXAU(new ExchangeValueSet(EXCHANGE_TYPES.XAU, XAU_Al, XAU_Sat));
-
-            Date date = new Date();
-            DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-            String strDate = dateFormat.format(date);
-            kuveytExchange.setTimeOfExchange(strDate);
-
-            //Log.e("EXCHANGE KUR:", ">>>>>:" + kurTable.lastElementSibling().html());
-            //Log.e("EXCHANGE", ">>>>>:" + doc.html());
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
+        try {
+            futureYapiKredi.get();
+            futureEnpara.get();
+            futureKuveytTurk.get();
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
-            Log.e("ERROR::", "HATAAAAAAAAAAAAAAA html okurken");
-            ykbExchange.setTimeOfExchange("HATA");//nextSibling().toString(); //"";//lastUpdateTime.text();
+            Log.e("ERROR2::", "Error reading HTML");
+            ykbExchange.setTimeOfExchange("Error");
+        } finally {
+            executor.shutdown();
         }
 
-        return response;
+        return "";
+    }
+
+    private void scrapeYapiKredi() throws IOException {
+        Document doc = Jsoup.connect("https://www.yapikredi.com.tr/yatirimci-kosesi/doviz-bilgileri.aspx?section=internet").userAgent("Mozilla").get();
+        Element kurTable = doc.getElementById("currencyResultContent");
+        Iterator<Element> iterator = kurTable.select("td").iterator();
+        String time = doc.getElementsByClass("dipnote").text().replace("Güncelleme :", "").trim();
+        ykbExchange.setTimeOfExchange(time);
+
+        while (iterator.hasNext()) {
+            Element currIter = iterator.next();
+            switch (currIter.text().trim()) {
+                case "USD":
+                    iterator.next();
+                    String USD_Al = iterator.next().text().trim();
+                    String USD_Sat = iterator.next().text().trim();
+                    ykbExchange.setExchangeSetUSD(new ExchangeValueSet(EXCHANGE_TYPES.USD, USD_Al, USD_Sat));
+                    break;
+                case "EUR":
+                    iterator.next();
+                    String EUR_Al = iterator.next().text().trim();
+                    String EUR_Sat = iterator.next().text().trim();
+                    ykbExchange.setExchangeSetEUR(new ExchangeValueSet(EXCHANGE_TYPES.EUR, EUR_Al, EUR_Sat));
+                    break;
+                case "XAU":
+                    iterator.next();
+                    String XAU_Al = iterator.next().text().trim();
+                    String XAU_Sat = iterator.next().text().trim();
+                    ykbExchange.setExchangeSetXAU(new ExchangeValueSet(EXCHANGE_TYPES.XAU, XAU_Al, XAU_Sat));
+                    break;
+            }
+        }
+    }
+
+    private void scrapeEnpara() throws IOException {
+        Document doc2 = Jsoup.connect("https://www.qnbfinansbank.enpara.com/hesaplar/doviz-ve-altin-kurlari").userAgent("Mozilla").get();
+        Elements kurTableEnpara = doc2.getElementsByClass("enpara-gold-exchange-rates__table");
+        Iterator<Element> iteratorEnpara = kurTableEnpara.select("div.enpara-gold-exchange-rates__table-item").iterator();
+
+        String currentDate = new SimpleDateFormat("dd.MM.yyyy-HH:mm", Locale.getDefault()).format(new Date());
+        enparaExchange.setTimeOfExchange(currentDate);
+
+        // USD
+        String usdStr = iteratorEnpara.next().text().replace("TL", "").replace("USD ($)", "").trim();
+        String USD_Al = usdStr.split("\\s+")[0];
+        String USD_Sat = usdStr.split("\\s+")[1];
+        enparaExchange.setExchangeSetUSD(new ExchangeValueSet(EXCHANGE_TYPES.USD, USD_Al, USD_Sat));
+
+        // EUR
+        String eurStr = iteratorEnpara.next().text().replace("TL", "").replace("EUR (€)","").trim();
+        String EUR_Al = eurStr.split("\\s+")[0];
+        String EUR_Sat = eurStr.split("\\s+")[1];
+        enparaExchange.setExchangeSetEUR(new ExchangeValueSet(EXCHANGE_TYPES.EUR, EUR_Al, EUR_Sat));
+
+        // XAU
+        String xauStr = iteratorEnpara.next().text().replace("TL", "").replace("Altın (gram)","").trim();
+        String XAU_Al = xauStr.split("\\s+")[0];
+        String XAU_Sat = xauStr.split("\\s+")[1];
+        enparaExchange.setExchangeSetXAU(new ExchangeValueSet(EXCHANGE_TYPES.XAU, XAU_Al, XAU_Sat));
+    }
+
+    private void scrapeKuveytTurk() throws IOException {
+        String json = Jsoup.connect("https://www.kuveytturk.com.tr/ck0d84?B83A1EF44DD940F2FEC85646BDB25EA0").
+                ignoreContentType(true).userAgent("Mozilla").execute().body();
+        try {
+            JSONArray jsonArray = new JSONArray(json);
+
+            for (int i = 0 ; i <  jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                String currencyCode = jsonObject.getString("CurrencyCode");
+                if (currencyCode.equalsIgnoreCase("USD")) {
+                    String title = jsonObject.getString("Title");
+                    Double buyRate = jsonObject.getDouble("BuyRate");
+                    Double sellRate = jsonObject.getDouble("SellRate");
+                    //double changeRate = jsonObject.getDouble("ChangeRate");
+
+                    kuveytExchange.setExchangeSetUSD(new ExchangeValueSet(EXCHANGE_TYPES.USD, String.format("%.4f", buyRate).replace('.', ','), String.format("%.4f", sellRate).replace('.', ',')));
+                }
+                else if (currencyCode.equalsIgnoreCase("EUR")) {
+                    String title = jsonObject.getString("Title");
+                    Double buyRate = jsonObject.getDouble("BuyRate");
+                    Double sellRate = jsonObject.getDouble("SellRate");
+                    //double changeRate = jsonObject.getDouble("ChangeRate");
+
+                    kuveytExchange.setExchangeSetEUR(new ExchangeValueSet(EXCHANGE_TYPES.EUR, String.format("%.4f", buyRate).replace('.', ','), String.format("%.4f", sellRate).replace('.', ',')));
+                }
+                else if (currencyCode.equalsIgnoreCase("ALT (gr)")) {
+                    String title = jsonObject.getString("Title");
+                    Double buyRate = jsonObject.getDouble("BuyRate");
+                    Double sellRate = jsonObject.getDouble("SellRate");
+                    //double changeRate = jsonObject.getDouble("ChangeRate");
+
+                    kuveytExchange.setExchangeSetXAU(new ExchangeValueSet(EXCHANGE_TYPES.XAU, String.format("%.2f", buyRate).replace('.', ','), String.format("%.2f", sellRate).replace('.', ',')));
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Date date = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+        String strDate = dateFormat.format(date);
+        kuveytExchange.setTimeOfExchange(strDate);
     }
 
     @Override
